@@ -45,7 +45,7 @@ p{margin:0;opacity:.85;font-size:14px;max-width:520px}
 .mc #lv{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 #lv button{clip-path:polygon(7% 0,100% 0,93% 100%,0 100%);background:linear-gradient(90deg,#ff3d8b,#7a1fff);border:0;font-weight:800;letter-spacing:1px;padding:10px 18px;font-size:13px}
 #lv button.big{background:linear-gradient(90deg,#ffd23f,#ff3d8b);color:#111;font-size:13px}
-#skc{position:static;inset:auto;width:96px;height:64px}
+#skc{position:static;inset:auto;width:170px;height:128px}
 #sk{display:flex;align-items:center;gap:8px}#skname{font-weight:800;letter-spacing:2px;color:#ffd23f;font-size:13px}
 #rot{display:none;position:fixed;inset:0;z-index:9;background:#0b0d1e;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:20px;font-size:20px}
 #rp{font-size:80px;animation:rr 1.6s ease-in-out infinite}
@@ -58,11 +58,17 @@ p{margin:0;opacity:.85;font-size:14px;max-width:520px}
 .tb{border-collapse:collapse;font-size:15px;margin:4px auto}.tb td{padding:2px 14px}.tb tr:first-child td{color:#ffd23f;font-weight:800}
 html,body,canvas,button,#menu,#over,#rot{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 #ini{-webkit-user-select:text;user-select:text}
-</style></head><body>
+body.m .ui{right:auto;left:calc(env(safe-area-inset-left,0px) + 8px)}
+#mw{display:flex;flex-direction:column;align-items:center;gap:20px;transform-origin:center}
+@media (orientation:landscape){#mw{flex-direction:row;gap:46px;align-items:center}}
+#sk button{font-size:28px;padding:6px 16px}
+#skname{font-size:16px}
+#menu{overflow:hidden}
+</style></head><body class="m">
 <canvas id="c"></canvas>
 <div class="ui"><button id="bi" style="display:none">📲 Instalar</button><button id="bm">🔊</button><button id="bf">⛶</button></div>
-<div id="menu"><div class="mc"><div class="logo"><span class="gl" data-t="NEON">NEON</span><span class="gl d" data-t="DASH">DASH</span></div><div class="tag">¡NO PARES · NO MUERAS!</div><p id="msg">Salta, vuela y rueda hasta la meta. Cambia de vehículo con los portales.</p></div><div class="mc"><div id="lv"></div><div id="sk"><button id="skp">‹</button><canvas id="skc" width="96" height="64"></canvas><button id="skn">›</button></div><div id="skname"></div><div id="tb"></div>
-<p>⌨️ Espacio / ↑ / W / clic · 📱 toca la pantalla · 🎮 botón A o cruceta ↑<br>F: pantalla completa · M: sonido</p></div></div>
+<div id="menu"><div id="mw"><div class="mc"><div class="logo"><span class="gl" data-t="NEON">NEON</span><span class="gl d" data-t="DASH">DASH</span></div><div class="tag">¡NO PARES · NO MUERAS!</div><div id="sk"><button id="skp">‹</button><canvas id="skc" width="240" height="180"></canvas><button id="skn">›</button></div><div id="skname"></div><p id="msg">Salta, vuela y rueda hasta la meta. Cambia de vehículo con los portales.</p></div><div class="mc"><div id="lv"></div><div id="tb"></div>
+<p>⌨️ Espacio / ↑ / W / clic · 📱 toca la pantalla · 🎮 botón A o cruceta ↑<br>F: pantalla completa · M: sonido</p></div></div></div>
 <div id="rot"><div id="rp">📱</div><b>Gira el móvil a horizontal</b><p>Neon Dash se juega en horizontal. Activa la rotación automática si no gira.</p></div>
 <div id="over"><div class="mc"><h1 id="ov-t"></h1><p id="ov-s" style="font-size:22px"></p><div id="ov-in" style="display:none;flex-direction:column;gap:8px;align-items:center"><p>Escribe tus 3 iniciales</p><input id="ini" maxlength="3" autocomplete="off" autocapitalize="characters"></div><button class="big" id="ov-ok">Aceptar</button></div><div class="mc" id="ov-tb"></div></div>
 <div id="roll"><p>Tu objeto de hoy…</p><div id="em">🎁</div><p id="en"></p></div>
@@ -180,10 +186,10 @@ $('bf').onclick=fs;$('bm').onclick=mute;
 /* ===== Game flow ===== */
 function best(i){try{return +localStorage.getItem('nd'+i)||0}catch(e){return 0}}
 function setBest(i,v){try{if(v>best(i))localStorage.setItem('nd'+i,v)}catch(e){}}
-function menuUI(msg){$('tb').innerHTML=tbl(3);$('msg').textContent=msg||'Salta, vuela y rueda hasta la meta. Cambia de vehículo con los portales.';
+function menuUI(msg){setTimeout(fitMenu,0);$('tb').innerHTML=tbl(3);$('msg').textContent=msg||'Salta, vuela y rueda hasta la meta. Cambia de vehículo con los portales.';
  $('lv').innerHTML='';LV.forEach((l,i)=>{const b=document.createElement('button');b.className=i==lvl?'big':'';b.textContent=`${i+1}. ${l.n} · ${best(i)}%`;b.onclick=()=>{lvl=i;initA();go(i)};$('lv').appendChild(b)})}
-function toMenu(){st='menu';W=null;$('menu').style.display='flex';menuUI()}
-function go(i){lvl=i;initA();W=build(LV[i]);att=1;lives=3;score=0;ck=null;$('menu').style.display='none';st='roll';
+function toMenu(){st='menu';W=null;document.body.classList.add('m');$('menu').style.display='flex';menuUI()}
+function go(i){lvl=i;initA();W=build(LV[i]);att=1;lives=3;score=0;ck=null;$('menu').style.display='none';document.body.classList.remove('m');st='roll';
  const r=$('roll'),em=$('em');r.style.display='flex';$('en').textContent='';let n=0;
  const iv=setInterval(()=>{em.textContent=ITEMS[n++%ITEMS.length].e;snd('roll')},90);
  setTimeout(()=>{clearInterval(iv);let k;do{k=Math.floor(Math.random()*ITEMS.length)}while(item&&ITEMS[k]==item&&Math.random()<.8);item=ITEMS[k];if(k==2)lives=4;em.textContent=item.e;$('en').textContent=item.n;snd('portal')},1400);
@@ -308,7 +314,7 @@ let skin=0;try{skin=+localStorage.getItem('ndskin')||0}catch(e){}if(!SK[skin])sk
 const SKX=$('skc').getContext('2d');
 function skinUI(){MC.cube=SK[skin].c;$('skname').textContent=SK[skin].n;try{localStorage.setItem('ndskin',skin)}catch(e){}}
 $('skp').onclick=()=>{skin=(skin+4)%5;skinUI()};$('skn').onclick=()=>{skin=(skin+1)%5;skinUI()};skinUI();
-function skPrev(){const X=SKX;X.clearRect(0,0,96,64);X.save();X.translate(48,34);X.scale(1.25,1.25);X.rotate(Math.sin(tm*2)*.15);cubeDraw(X,SK[skin].c,SK[skin].f);X.restore()}
+function skPrev(){const X=SKX;X.clearRect(0,0,240,180);X.save();X.translate(120,96);X.scale(2.9,2.9);X.rotate(Math.sin(tm*2)*.15);cubeDraw(X,SK[skin].c,SK[skin].f);X.restore()}
 function cubeDraw(X,c,f){const h=S/2;X.shadowColor=c;X.shadowBlur=14;X.fillStyle=c;X.fillRect(-h,-h,S,S);X.shadowBlur=0;
  if(f==1){X.beginPath();X.moveTo(-h,-h);X.lineTo(-h-4,-h-12);X.lineTo(-h+10,-h);X.moveTo(h,-h);X.lineTo(h+4,-h-12);X.lineTo(h-10,-h);X.fill()}
  X.fillStyle=f==4?'#cfcabb':'#0d101c';X.fillRect(-h+3,-h+3,S-6,S-6);X.fillStyle=c+'44';X.fillRect(-h+3,-h+3,S-6,5);
@@ -347,4 +353,6 @@ if('serviceWorker' in navigator&&location.protocol!='file:')addEventListener('lo
 ['contextmenu','selectstart','dragstart','gesturestart','gesturechange'].forEach(n=>document.addEventListener(n,e=>{if(e.target&&e.target.tagName=='INPUT')return;e.preventDefault()},{passive:false}));
 cv.addEventListener('touchstart',e=>e.preventDefault(),{passive:false});
 cv.addEventListener('touchmove',e=>e.preventDefault(),{passive:false});
+function fitMenu(){const m=$('mw');if(!m)return;m.style.transform='none';const w=m.offsetWidth,h=m.offsetHeight;if(!w||!h)return;const k=Math.max(.45,Math.min((innerWidth-30)/w,(innerHeight-110)/h,2.4));m.style.transform='scale('+k+')'}
+addEventListener('resize',fitMenu);addEventListener('load',fitMenu);if(document.fonts)document.fonts.ready.then(fitMenu);
 </script></body></html>
