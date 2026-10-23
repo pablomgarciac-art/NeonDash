@@ -1,0 +1,19 @@
+{
+  "name": "Neon Dash",
+  "short_name": "Neon Dash",
+  "description": "Plataformas de ritmo y reflejos: salta, vuela y rueda hasta la meta.",
+  "lang": "es",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "display_override": ["fullscreen", "standalone"],
+  "orientation": "landscape",
+  "background_color": "#0b0d1e",
+  "theme_color": "#0b0d1e",
+  "categories": ["games"],
+  "icons": [
+    {"src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png"},
+    {"src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png"},
+    {"src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}
