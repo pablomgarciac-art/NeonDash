@@ -336,7 +336,10 @@ function tile2(x,y,r,c,T){const f=T.f,fl=r==8,hh=fl?300:TS,top=r<8&&(r==0||W.g[r
  if(r==0){ctx.shadowColor=T.t;ctx.shadowBlur=12;ctx.fillStyle=f==3?'#ff7a20':T.t;ctx.fillRect(x,y+TS-3,TS+.5,3);ctx.shadowBlur=0}}
 menuUI();requestAnimationFrame(loop);
 let dip=null;addEventListener('beforeinstallprompt',e=>{e.preventDefault();dip=e;$('bi').style.display=''});
-$('bi').onclick=async()=>{if(dip){dip.prompt();await dip.userChoice;dip=null;$('bi').style.display='none'}};
+$('bi').onclick=async()=>{if(dip){dip.prompt();await dip.userChoice;dip=null;$('bi').style.display='none'}else alert('Para instalarlo en tu iPhone:\n1. Toca el botón Compartir (cuadrado con flecha hacia arriba).\n2. Elige «Añadir a pantalla de inicio».\n3. Pulsa Añadir.\nSe abrirá como una app, a pantalla completa.')};
+const ios=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform=='MacIntel'&&navigator.maxTouchPoints>1);
+const stand=navigator.standalone||matchMedia('(display-mode:standalone)').matches||matchMedia('(display-mode:fullscreen)').matches;
+if(ios&&!stand)$('bi').style.display='';
 addEventListener('appinstalled',()=>{$('bi').style.display='none'});
 if('serviceWorker' in navigator&&location.protocol!='file:')addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 </script></body></html>
